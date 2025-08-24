@@ -1,0 +1,6 @@
+streamlit
+streamlit-drawable-canvas
+msal
+requests
+pandas
+pillow
