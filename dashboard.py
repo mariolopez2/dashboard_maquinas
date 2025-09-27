@@ -300,15 +300,25 @@ def _scol(df: pd.DataFrame, name: str, default=""):
 
 def _rutas_maps(rutas_df: pd.DataFrame):
     df = rutas_df.copy()
+    # Normalize id_ruta to string values
     if "id_ruta" in df.columns:
         df["id_ruta"] = pd.to_numeric(df["id_ruta"], errors="coerce").fillna(0).astype(int).astype(str)
-    df["nombre"] = df.get("nombre", "").astype(str).fillna("")
-    id2name: Dict[str,str] = {}
+    else:
+        # If the column is missing, create an empty column of the appropriate type
+        df["id_ruta"] = pd.Series(["" for _ in range(len(df))], index=df.index)
+
+    # Ensure the 'nombre' column exists and is a string series. If it's missing, create a default empty series.
+    if "nombre" in df.columns:
+        df["nombre"] = df["nombre"].astype(str).fillna("")
+    else:
+        df["nombre"] = pd.Series(["" for _ in range(len(df))], index=df.index)
+
+    id2name: Dict[str, str] = {}
     for _, r in df.iterrows():
         rid = r.get("id_ruta", "")
-        nm  = (r.get("nombre", "") or "").strip() or f"Ruta {rid}"
+        nm = (r.get("nombre", "") or "").strip() or f"Ruta {rid}"
         id2name[rid] = nm
-    name2id = {v:k for k,v in id2name.items()}
+    name2id = {v: k for k, v in id2name.items()}
     route_names = list(name2id.keys())
     route_names.sort()
     return route_names, name2id, id2name
