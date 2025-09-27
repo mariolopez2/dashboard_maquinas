@@ -1,6 +1,6 @@
-streamlit
-streamlit-drawable-canvas
-msal
-requests
-pandas
-pillow
+streamlit==1.37.1
+streamlit-drawable-canvas==0.9.3
+msal==1.27.0
+pandas==2.2.2
+requests==2.32.3
+Pillow==10.4.0
